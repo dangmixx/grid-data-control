@@ -1,0 +1,10 @@
+<p class="title-page">Dashboard</p>
+<div class="content-page--container">
+  <app-input-suggestion
+    [label]="'Input'"
+    [listItem]="filterSuggestion"
+    [placeholder]="'Place Holder'"
+    (textInputChange)="onTextChange($event)"
+    [formControl]="control"
+  ></app-input-suggestion>
+</div>
