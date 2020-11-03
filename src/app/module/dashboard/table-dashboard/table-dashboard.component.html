@@ -1,0 +1,10 @@
+<button (click)="button()">Add row</button>
+<app-grid-data-table
+  [formGroup]="formGroup"
+  [dataSource]="dataSource"
+  [configGrid]="gridConfig"
+  (addNewRow)="addRow(null, true)"
+>
+</app-grid-data-table>
+
+<button (click)="fromdata()">Add row</button>

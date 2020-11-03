@@ -5,9 +5,10 @@ import { ModuleRouting } from './module-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpClientModule } from '@angular/common/http';
+import { TableDashboardComponent } from './dashboard/table-dashboard/table-dashboard.component';
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, TableDashboardComponent],
   imports: [
     CommonModule,
     ModuleRouting,

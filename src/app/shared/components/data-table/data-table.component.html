@@ -1,1 +1,188 @@
-z
+<div class="mat-elevation-z8 mat-table">
+  <div class="example-loading-shade" *ngIf="isLoading">
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+  </div>
+  <mat-table
+    [dataSource]="dataSource.items"
+    matSort
+    (matSortChange)="handelSortChange($event)"
+  >
+    <ng-container
+      matColumnDef="selectTable"
+      *ngIf="configDataTable.selectTable"
+    >
+      <mat-header-cell *matHeaderCellDef class="column-checkbox">
+        <mat-checkbox
+          [indeterminate]="indeterminateCheckHeader"
+          [checked]="isCheckAllAtHeader"
+          (change)="checkAllAtHeader($event)"
+        >
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="column-checkbox">
+        <mat-checkbox
+          [checked]="element.checked"
+          (change)="
+            element.checked = $event.checked; selectedItemOnRow(element)
+          "
+        >
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+    <ng-container
+      *ngFor="let column of configDataTable.columnTable"
+      [matColumnDef]="column.columnDefine"
+    >
+      <!-- Default column Type -->
+      <ng-container
+        *ngIf="!column.columnType || column.columnType === columnType.DEFAULT"
+      >
+        <mat-header-cell
+          *matHeaderCellDef
+          [mat-sort-header]="null"
+          [disabled]="!column.matSort"
+          class="mat-column-name"
+          [ngStyle]="{
+            'max-width': column.maxWidth ? column.maxWidth + 'px' : 'unset',
+            'text-align': column.textAlign ? column.textAlign : 'left'
+          }"
+        >
+          {{ column.columnName | translate }}
+        </mat-header-cell>
+        <mat-cell
+          *matCellDef="let element"
+          class="mat-column-name"
+          [ngStyle]="{
+            'max-width': column.maxWidth ? column.maxWidth + 'px' : 'unset',
+            'text-align': column.textAlign ? column.textAlign : 'left'
+          }"
+        >
+          {{ element[column.columnDefine] | formatCustom: column.format }}
+        </mat-cell>
+      </ng-container>
+      <!--End Default column Type -->
+
+      <!-- Link column Type -->
+      <ng-container
+        *ngIf="!column.columnType || column.columnType === columnType.LINK"
+      >
+        <mat-header-cell
+          *matHeaderCellDef
+          [mat-sort-header]="null"
+          [disabled]="!column.matSort"
+          class="mat-column-name"
+          [ngStyle]="{
+            'max-width': column.maxWidth ? column.maxWidth + 'px' : 'unset',
+            'text-align': column.textAlign ? column.textAlign : 'left'
+          }"
+        >
+          {{ column.columnName | translate }}
+        </mat-header-cell>
+        <mat-cell
+          *matCellDef="let element"
+          class="mat-column-name"
+          [ngStyle]="{
+            'max-width': column.maxWidth ? column.maxWidth + 'px' : 'unset',
+            'text-align': column.textAlign ? column.textAlign : 'left'
+          }"
+        >
+          {{ element[column.columnDefine] | formatCustom: column.format }}
+        </mat-cell>
+      </ng-container>
+      <!--End Link column Type -->
+
+      <!-- Image column Type -->
+      <ng-container *ngIf="column.columnType === columnType.IMAGE">
+        <mat-header-cell
+          *matHeaderCellDef
+          [mat-sort-header]="null"
+          [disabled]
+          class="mat-column-name"
+          [ngStyle]="{
+            'max-width': column.maxWidth ? column.maxWidth + 'px' : 'unset',
+            'text-align': column.textAlign ? column.textAlign : 'left'
+          }"
+        >
+          {{ column.columnName | translate }}
+        </mat-header-cell>
+        <mat-cell
+          *matCellDef="let element"
+          class="mat-column-name"
+          [ngStyle]="{
+            'max-width': column.maxWidth ? column.maxWidth + 'px' : 'unset',
+            'text-align': column.textAlign ? column.textAlign : 'left'
+          }"
+        >
+          <div class="img-thumbnail">
+            <img
+              [src]="element[column.columnDefine]"
+              onerror="this.onerror=null;this.src='./assets/images/no_image.jpg';"
+            />
+          </div>
+        </mat-cell>
+      </ng-container>
+      <!--End Image column Type -->
+
+      <!-- Input column Type -->
+      <ng-container *ngIf="column.columnType === columnType.INPUT">
+        <mat-header-cell
+          *matHeaderCellDef
+          [mat-sort-header]="null"
+          [disabled]
+          class="mat-column-name"
+          [ngStyle]="{
+            'max-width': column.maxWidth ? column.maxWidth + 'px' : 'unset',
+            'text-align': column.textAlign ? column.textAlign : 'left'
+          }"
+        >
+          {{ column.columnName | translate }}
+        </mat-header-cell>
+        <mat-cell
+          *matCellDef="let element"
+          class="mat-column-name"
+          [ngStyle]="{
+            'max-width': column.maxWidth ? column.maxWidth + 'px' : 'unset',
+            'text-align': column.textAlign ? column.textAlign : 'left'
+          }"
+        >
+          <input
+            matInput
+            [type]="column.inputFormat ? column.inputFormat : 'text'"
+            [(ngModel)]="element[column.columnDefine]"
+            (ngModelChange)="inputChange(element)"
+          />
+        </mat-cell>
+      </ng-container>
+      <!--End Input column Type -->
+    </ng-container>
+
+    <ng-container matColumnDef="action" *ngIf="configDataTable.action">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <ng-container *ngFor="let action of configDataTable.action">
+          <button
+            mat-button
+            class="btn-action"
+            [matTooltip]="action.tooltip | translate"
+            (click)="onAction(action.action, element[primaryKeySelect])"
+          >
+            <i class="material-icons md-18 md-dark">
+              {{ action.materialIcon }}
+            </i>
+          </button>
+        </ng-container>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+  <mat-paginator
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="paging.pageSize"
+    [length]="dataSource.totalCount"
+    showFirstLastButtons
+    (page)="onPaging($event)"
+  >
+  </mat-paginator>
+</div>

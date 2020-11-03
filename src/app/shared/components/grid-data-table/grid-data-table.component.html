@@ -1,0 +1,36 @@
+<form [formGroup]="formGroup">
+  <mat-table [dataSource]="dataSource" formArrayName="formArrayName">
+    <!-- Column definitions -->
+    <ng-container
+      *ngFor="let column of configGrid.columnGrid; let indexColum = index"
+      [matColumnDef]="column.columnDefine"
+    >
+      <mat-header-cell *matHeaderCellDef class="mat-column-name">
+        {{ column.columnName | translate }}
+      </mat-header-cell>
+
+      <mat-cell
+        *matCellDef="let element; let indexRow = index"
+        class="mat-column-name"
+        [formGroupName]="indexRow"
+      >
+        <mat-form-field class="example-full-width">
+          <input
+            type="email"
+            matInput
+            [formControlName]="column.columnDefine"
+            (keydown.Tab)="onTabKey(indexColum, indexRow)"
+          />
+
+          <mat-error> Email is <strong>required</strong> </mat-error>
+        </mat-form-field>
+      </mat-cell>
+    </ng-container>
+    <!-- End Column definitions -->
+
+    <!-- Row definitions -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    <!-- End Row definitions -->
+  </mat-table>
+</form>
