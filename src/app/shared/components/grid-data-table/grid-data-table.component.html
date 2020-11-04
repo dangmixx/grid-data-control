@@ -14,15 +14,47 @@
         class="mat-column-name"
         [formGroupName]="indexRow"
       >
-        <mat-form-field class="example-full-width">
+        <!-- Input -->
+        <mat-form-field class="example-full-width" *ngIf="!column.columnType">
           <input
-            type="email"
+            type="text"
             matInput
             [formControlName]="column.columnDefine"
-            (keydown.Tab)="onTabKey(indexColum, indexRow)"
+            (keydown.Tab)="goNextRow(); callBackRow(column, element)"
+            (keydown.Enter)="goNextRow()"
+            onEnterGridTable
           />
 
           <mat-error> Email is <strong>required</strong> </mat-error>
+        </mat-form-field>
+
+        <!-- Select -->
+        <mat-form-field *ngIf="column.columnType">
+          <input
+            matInput
+            [formControlName]="column.columnDefine"
+            [matAutocomplete]="auto"
+            onEnterGridTable
+          />
+
+          <mat-autocomplete
+            (optionSelected)="goNextRow(); callBackRow(column, element)"
+            autoActiveFirstOption
+            [displayWith]="displayFn"
+            #auto="matAutocomplete"
+          >
+            <mat-option
+              *ngFor="let option of column.options() "
+              [value]="option"
+            >
+              {{ option.text }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-hint *ngIf="suggestionItems.length == 0">{{
+            "No selection" | translate
+          }}</mat-hint>
+
+          <mat-error>Required</mat-error>
         </mat-form-field>
       </mat-cell>
     </ng-container>

@@ -12,6 +12,7 @@ import { CustomFormatPipe } from '../core/pipe/custom-format.pipe';
 import { LayoutModule } from '@angular/cdk/layout';
 import { GridDataTableComponent } from './components/grid-data-table/grid-data-table.component';
 import { BaseGridDataComponent } from './components/grid-data-table/base-grid-data-table.componet';
+import { OnEnterNextDirective } from '../core/directives/on-enter-next.directive';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { BaseGridDataComponent } from './components/grid-data-table/base-grid-da
     InputSuggestionComponent,
     CustomFormatPipe,
     GridDataTableComponent,
-    BaseGridDataComponent
+    BaseGridDataComponent,
+    OnEnterNextDirective,
   ],
   imports: [
     CommonModule,
@@ -37,7 +39,8 @@ import { BaseGridDataComponent } from './components/grid-data-table/base-grid-da
     InputSuggestionComponent,
     CustomFormatPipe,
     GridDataTableComponent,
-    BaseGridDataComponent
+    BaseGridDataComponent,
+    OnEnterNextDirective
   ],
 })
 export class SharedModule {}

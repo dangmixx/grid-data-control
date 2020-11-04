@@ -16,7 +16,9 @@
       {{ option.text }}
     </mat-option>
   </mat-autocomplete>
-  <mat-hint *ngIf="listItem.length == 0">{{'No selection' | translate}}</mat-hint>
+  <mat-hint *ngIf="listItem.length == 0">{{
+    "No selection" | translate
+  }}</mat-hint>
 
   <mat-error>Required</mat-error>
 </mat-form-field>
