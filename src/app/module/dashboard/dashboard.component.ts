@@ -39,7 +39,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onTextChange(textChange: string): void {
-    console.log(textChange);
     this.filterSuggestion = this.suggestionItems.filter(
       (option) =>
         option.text.toLowerCase().indexOf(textChange.toLowerCase()) !== -1

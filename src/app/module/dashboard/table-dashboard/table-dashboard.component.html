@@ -1,10 +1,104 @@
-<button (click)="button()">Add row</button>
-<app-grid-data-table
-  [formGroup]="formGroup"
-  [dataSource]="dataSource"
-  [configGrid]="gridConfig"
-  (addNewRow)="addRow(null, true)"
->
-</app-grid-data-table>
+<form [formGroup]="formGroup">
+  <mat-table [dataSource]="dataSource" formArrayName="formArrayName">
+    <!-- Column definitions -->
 
-<button (click)="fromdata()">Add row</button>
+    <!-- Id Column  -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef class="mat-column-name">
+        {{ "id" | translate }}
+      </mat-header-cell>
+
+      <mat-cell
+        *matCellDef="let element; let indexRow = index"
+        class="mat-column-name"
+        [formGroupName]="indexRow"
+      >
+        <!-- Input -->
+        <mat-form-field class="example-full-width">
+          <input
+            type="text"
+            matInput
+            formControlName="id"
+            onEnterGridTable
+            (keydown.Tab)="onAddNewRow()"
+            (keydown.Enter)="onAddNewRow()"
+          />
+
+          <mat-error> Email is <strong>required</strong> </mat-error>
+        </mat-form-field>
+      </mat-cell>
+    </ng-container>
+    <!-- End Id Column  -->
+
+    <!-- Start Name Column  -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef class="mat-column-name">
+        {{ "name" | translate }}
+      </mat-header-cell>
+
+      <mat-cell
+        *matCellDef="let element; let indexRow = index"
+        class="mat-column-name"
+        [formGroupName]="indexRow"
+      >
+        <!-- Select -->
+        <mat-form-field>
+          <input
+            matInput
+            formControlName="name"
+            [matAutocomplete]="auto"
+            onEnterGridTable
+          />
+
+          <mat-autocomplete
+            autoActiveFirstOption
+            [displayWith]="displayFn"
+            #auto="matAutocomplete"
+            (optionSelected)="onAddNewRow()"
+          >
+            <mat-option
+              *ngFor="let option of filterSuggestion"
+              [value]="option"
+            >
+              {{ option.text }}
+            </mat-option>
+          </mat-autocomplete>
+
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Address Column -->
+    <ng-container matColumnDef="address">
+      <mat-header-cell *matHeaderCellDef class="mat-column-name">
+        {{ "note" | translate }}
+      </mat-header-cell>
+
+      <mat-cell
+        *matCellDef="let element; let indexRow = index"
+        class="mat-column-name"
+        [formGroupName]="indexRow"
+      >
+        <!-- Input -->
+        <mat-form-field class="example-full-width">
+          <input
+            type="text"
+            matInput
+            formControlName="address"
+            onEnterGridTable
+            (keydown.Tab)="onAddNewRow()"
+            (keydown.Enter)="onAddNewRow()"
+          />
+        </mat-form-field>
+      </mat-cell>
+    </ng-container>
+    <!-- End Address Column -->
+    <!-- End Column definitions -->
+
+    <!-- Row definitions -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    <!-- End Row definitions -->
+  </mat-table>
+</form>

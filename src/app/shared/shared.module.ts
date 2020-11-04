@@ -40,7 +40,7 @@ import { OnEnterNextDirective } from '../core/directives/on-enter-next.directive
     CustomFormatPipe,
     GridDataTableComponent,
     BaseGridDataComponent,
-    OnEnterNextDirective
+    OnEnterNextDirective,
   ],
 })
 export class SharedModule {}

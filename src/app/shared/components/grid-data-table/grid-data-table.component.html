@@ -44,15 +44,13 @@
             #auto="matAutocomplete"
           >
             <mat-option
-              *ngFor="let option of column.options() "
+              *ngFor="let option of column.options"
               [value]="option"
             >
               {{ option.text }}
             </mat-option>
           </mat-autocomplete>
-          <mat-hint *ngIf="suggestionItems.length == 0">{{
-            "No selection" | translate
-          }}</mat-hint>
+         
 
           <mat-error>Required</mat-error>
         </mat-form-field>

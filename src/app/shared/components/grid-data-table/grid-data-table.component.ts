@@ -7,13 +7,11 @@ import {
   Output,
 } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import {
   ColumnGridModel,
   ConfigurationGridTableModel,
 } from 'src/app/core/models/config-grid-table.mode';
-import { DataTableConfigModel } from 'src/app/core/models/config-table.models';
-import { GridData } from 'src/app/core/models/grid-data.models';
 import { SuggestionItemsModel } from 'src/app/core/models/suggestion-items.model';
 
 @Component({
@@ -22,20 +20,6 @@ import { SuggestionItemsModel } from 'src/app/core/models/suggestion-items.model
   styleUrls: ['./grid-data-table.component.scss'],
 })
 export class GridDataTableComponent implements OnInit, OnChanges {
-  suggestionItems: SuggestionItemsModel[] = [
-    {
-      text: 'Item 1',
-      value: 'item1',
-    },
-    {
-      text: 'Item 2',
-      value: 'item2',
-    },
-    {
-      text: 'Item 3',
-      value: 'item3',
-    },
-  ];
   @Input() configGrid: ConfigurationGridTableModel;
   @Input() dataSource: BehaviorSubject<AbstractControl[]>;
   @Input() formGroup: FormGroup;
@@ -45,9 +29,6 @@ export class GridDataTableComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.setDisplayColumn();
-    console.log(this.formGroup);
-
-    console.log(this.dataSource);
   }
 
   ngOnInit(): void {}
@@ -81,5 +62,11 @@ export class GridDataTableComponent implements OnInit, OnChanges {
     if (item.callback) {
       item.callback(row);
     }
+  }
+
+  getListForMatOptionAsync(options: Observable<any>) {
+    console.log(options);
+
+    return options.subscribe();
   }
 }

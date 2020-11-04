@@ -12,7 +12,7 @@ export interface ColumnGridModel {
   columnTypeFormat?: string;
   inputFormat?: string;
   callback?: (row?: any) => void;
-  options?: (list?: any) => any;
+  options?: ((list?: any) => any) | any;
 }
 
 export enum ColumnGridTypeEnum {
