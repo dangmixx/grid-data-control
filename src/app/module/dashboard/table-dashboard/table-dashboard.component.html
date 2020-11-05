@@ -13,7 +13,11 @@
         *matCellDef="let element; let indexRow = index"
         class="mat-column-action"
       >
-        <button mat-icon-button (click)="deleteRow(indexRow)">
+        <button
+          mat-icon-button
+          (click)="deleteRow(indexRow)"
+          *ngIf="rows.length - 1 !== indexRow"
+        >
           <mat-icon>delete</mat-icon>
         </button>
       </mat-cell>
