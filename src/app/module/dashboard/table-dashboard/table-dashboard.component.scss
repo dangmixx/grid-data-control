@@ -1,0 +1,31 @@
+.mat-column-index {
+  max-width: 20px;
+  div {
+    width: 100%;
+    text-align: right;
+  }
+}
+.mat-column-action {
+  max-width: 50px;
+}
+::ng-deep {
+  mat-header-cell {
+    padding: 0 10px !important;
+  }
+
+  mat-cell {
+    padding: 0 10px !important;
+  }
+
+  .cdk-overlay-pane {
+    min-width: max-content !important;
+  }
+}
+
+.mat-input-element:disabled {
+  color: black !important;
+}
+
+.cell-index {
+  text-align: right;
+}

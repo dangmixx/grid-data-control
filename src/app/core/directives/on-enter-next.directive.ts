@@ -12,7 +12,7 @@ import {
 })
 export class OnEnterNextDirective {
   private el: ElementRef;
-  @Input() onReturn: string;
+  @Input() onEnterGridTable: string;
   @Output() endList = new EventEmitter<boolean>();
   constructor(private elR: ElementRef) {
     this.el = this.elR;
@@ -26,12 +26,10 @@ export class OnEnterNextDirective {
     if (e.which === 13 || e.keyCode === 13) {
       e.preventDefault();
       if (document.querySelector('.mat-autocomplete-panel')) {
-        console.log('On mat-option');
         return;
       }
-      let nextInput = document.getElementById(
-        'mat-input-' + (idTargetNumber + 1)
-      );
+
+      let nextInput = this.getElementToFocus(idTargetNumber);
 
       // avoid control is disabled
 
@@ -48,4 +46,17 @@ export class OnEnterNextDirective {
       }
     }
   }
+
+  getElementToFocus(idTargetNumber) {
+    let nextElement;
+    if (this.onEnterGridTable) {
+      nextElement = document.getElementsByClassName(this.onEnterGridTable)[0];
+    } else {
+      nextElement = document.getElementById(
+        'mat-input-' + (idTargetNumber + 1)
+      );
+    }
+    return nextElement;
+  }
+
 }

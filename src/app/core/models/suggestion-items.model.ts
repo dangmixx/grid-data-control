@@ -1,4 +1,6 @@
+
 export interface SuggestionItemsModel {
   text: string;
-  value: string | number;
+  value: any;
+  [key: string]: any;
 }

@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Thông báo</h1>
+<div mat-dialog-content>
+  <p>bạn có muốn tiếp tục</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="false" (click)="onNoClick()">No</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Yes</button>
+</div>

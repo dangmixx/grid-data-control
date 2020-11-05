@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -7,14 +7,19 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { DialogConfirmComponent } from 'src/app/core/components/dialog-confirm/dialog-confirm.component';
+import { OnEnterNextDirective } from 'src/app/core/directives/on-enter-next.directive';
 import { SuggestionItemsModel } from 'src/app/core/models/suggestion-items.model';
+import { DataService } from 'src/app/core/services/data.service';
 
 export interface DashboardModel {
   id: string;
   name: string;
   address: string;
+  active: boolean;
 }
 @Component({
   selector: 'app-table-dashboard',
@@ -25,48 +30,39 @@ export class TableDashboardComponent implements OnInit {
   dataSource: BehaviorSubject<AbstractControl[]> = new BehaviorSubject<
     AbstractControl[]
   >([]);
-  displayedColumns = ['id', 'name', 'address'];
+  displayedColumns = ['action', 'index', 'id', 'name', 'address', 'active'];
 
   rows: FormArray = this.fb.array([]);
   formGroup: FormGroup = this.fb.group({ formArrayName: this.rows });
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private dataService: DataService,
+    private matDialog: MatDialog
+  ) {
     this.addRow(null, true);
   }
 
   filterSuggestion = [];
 
-  suggestionItems = [
-    {
-      text: 'So 1',
-      value: '1',
-    },
-    {
-      text: 'So 2',
-      value: '2',
-    },
-    {
-      text: 'So 3',
-      value: '3',
-    },
-  ];
-
   ngOnInit() {
-    this.filterSuggestion = this.suggestionItems;
+    this.filterListData('');
   }
 
   displayFn(item: SuggestionItemsModel): string {
-    return item && item.text ? item.text : '';
+    return item && item.value ? item.value : '';
   }
 
   addRow(d?: DashboardModel, updateView?: boolean) {
+    console.log('add');
     const row = this.fb.group({
       id: new FormControl({ value: d && d.id ? d.id : null, disabled: false }, [
         Validators.required,
+        this.validationId,
       ]),
       name: new FormControl(
         {
           value: d && d.name ? d.name : null,
-          disabled: false,
+          disabled: true,
         },
         [Validators.required]
       ),
@@ -74,12 +70,25 @@ export class TableDashboardComponent implements OnInit {
         { value: d && d.address ? d.address : null, disabled: false },
         []
       ),
+      active: new FormControl(
+        { value: d && d.active ? d.active : true, disabled: false },
+        []
+      ),
     });
 
-    // listen form control name change data to getlist
-    row.controls.name.valueChanges.pipe(debounceTime(300)).subscribe((data) => {
-      this.filterListData(data);
+    // listen form control change data
+    row.controls.id.valueChanges.pipe(debounceTime(300)).subscribe((data) => {
+      if (typeof data !== 'string') {
+        row.controls.name.setValue(data.text);
+        this.dataService.getListDropDownId('').subscribe((item) => {
+          this.filterSuggestion = item;
+        });
+      } else {
+        this.filterListData(data);
+        row.controls.name.setValue('');
+      }
     });
+
     this.rows.push(row);
 
     if (updateView) {
@@ -88,19 +97,13 @@ export class TableDashboardComponent implements OnInit {
   }
 
   filterListData(data) {
-    if (typeof data === 'string') {
-      this.filterSuggestion = this.suggestionItems.filter(
-        (option) => option.text.toLowerCase().indexOf(data.toLowerCase()) !== -1
-      );
-    } else {
-      this.filterSuggestion = [...this.suggestionItems];
-    }
+    this.dataService.getListDropDownId(data).subscribe((item) => {
+      this.filterSuggestion = item;
+    });
   }
 
   updateView() {
     this.dataSource.next(this.rows.controls);
-    console.log(this.formGroup);
-    console.log(this.rows);
   }
 
   onAddNewRow() {
@@ -114,15 +117,56 @@ export class TableDashboardComponent implements OnInit {
     });
   }
 
-  onTextChange(textChange: string): void {
-    console.log(textChange);
-    this.filterSuggestion = this.suggestionItems.filter(
-      (option) =>
-        option.text.toLowerCase().indexOf(textChange.toLowerCase()) !== -1
-    );
-  }
-
   getFormControl(index, nameControl) {
     return this.rows.controls[index].get(nameControl);
+  }
+
+  validationId(control: AbstractControl): { [key: string]: boolean | null } {
+    if (control.value !== undefined && typeof control.value === 'string') {
+      return { notChonse: true };
+    }
+    return null;
+  }
+
+  submitForm() {
+    console.log(this.formGroup.getRawValue());
+    console.log(this.formGroup);
+  }
+
+  checkValueIdForm(indexRow) {
+    setTimeout(() => {
+      if (indexRow === 0 && this.rows.controls.length === 1) {
+        return;
+      }
+
+      if (
+        this.rows.controls[indexRow].invalid &&
+        indexRow !== this.rows.controls.length - 1
+      ) {
+        this.openDialogConfirmItem(indexRow);
+      }
+    }, 200);
+  }
+
+  openDialogConfirmItem(indexRow) {
+    const dialog = this.matDialog.open(DialogConfirmComponent);
+    dialog.afterClosed().subscribe((result) => {
+      console.log(result);
+      if (result) {
+        this.rows.removeAt(indexRow);
+        this.updateView();
+      } else {
+        const nextInput = document.getElementsByClassName(
+          'input-id-' + indexRow
+        )[0] as HTMLElement;
+        if (nextInput) {
+          nextInput.focus();
+        }
+      }
+    });
+  }
+  deleteRow(index) {
+    this.rows.removeAt(index);
+    this.updateView();
   }
 }

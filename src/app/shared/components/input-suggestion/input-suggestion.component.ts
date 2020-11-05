@@ -13,7 +13,7 @@ export class InputSuggestionComponent implements OnInit {
   @Input() placeholder = '';
   @Input() label = '';
   @Input() listItem: SuggestionItemsModel[] = [];
-  @Input() formControl = new FormControl();
+  @Input() myControl = new FormControl();
   @Output()
   textInputChange = new EventEmitter<string>();
 
@@ -23,17 +23,13 @@ export class InputSuggestionComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.formControl.valueChanges
+    this.myControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((textChange: any) => {
         if (typeof textChange === 'string') {
           this.textInputChange.emit(textChange);
         }
       });
-  }
-
-  changeOptions(value: MatAutocompleteSelectedEvent): void {
-    console.log(value.option.value);
   }
 
   displayFn(item: SuggestionItemsModel): string {

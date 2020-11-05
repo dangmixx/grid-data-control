@@ -11,6 +11,7 @@ import { FooterComponent } from './core/components/footer/footer.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { DialogConfirmComponent } from './core/components/dialog-confirm/dialog-confirm.component';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -21,6 +22,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     PageNotFoundComponent,
     NavbarComponent,
     FooterComponent,
+    DialogConfirmComponent,
   ],
   imports: [
     HttpClientModule,
