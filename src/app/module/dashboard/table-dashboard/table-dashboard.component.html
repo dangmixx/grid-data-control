@@ -1,4 +1,4 @@
-<button mat-raised-button (click)="submitForm()">Submit Form</button>
+<button mat-raised-button class="btn--submit-form" (click)="submitForm()">Submit Form</button>
 
 <form [formGroup]="formGroup">
   <mat-table [dataSource]="dataSource" formArrayName="formArrayName">
@@ -16,6 +16,8 @@
         <button
           mat-icon-button
           (click)="deleteRow(indexRow)"
+          (contextmenu)="onRightClick()"
+          appNoRightClick
           *ngIf="rows.length - 1 !== indexRow"
         >
           <mat-icon>delete</mat-icon>
@@ -42,7 +44,7 @@
     <!-- Id Column  -->
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef class="mat-column-name">
-        Mã sản phẩm
+        <p class="required-cell">Mã sản phẩm</p>
       </mat-header-cell>
 
       <mat-cell

@@ -29,3 +29,22 @@
 .cell-index {
   text-align: right;
 }
+
+.required-cell {
+  margin: 0px;
+  &::after {
+    content: "*";
+    color: red;
+  }
+}
+
+.btn--submit-form {
+  margin-bottom: 15px;
+}
+
+.mat-header-cell {
+  background-color: #00bec7;
+  color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+}

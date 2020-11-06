@@ -10,12 +10,14 @@ import { MaterialModule } from '../material.module';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormControlNameOnchangeDirective } from '../core/directives/form-control-name-onchange.directive';
+import { RightClickDirective } from '../core/directives/right-click-prevent.directive';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     TableDashboardComponent,
     FormControlNameOnchangeDirective,
+    RightClickDirective,
   ],
   imports: [
     CommonModule,

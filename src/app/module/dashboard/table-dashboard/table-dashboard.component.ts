@@ -131,6 +131,18 @@ export class TableDashboardComponent implements OnInit {
   submitForm() {
     console.log(this.formGroup.getRawValue());
     console.log(this.formGroup);
+    let dataTable = (this.formGroup.controls
+      .formArrayName as FormArray).getRawValue();
+    dataTable = this.convertDataTable(dataTable);
+    console.log(dataTable);
+  }
+
+  convertDataTable(dataTable: any[]) {
+    dataTable.splice(dataTable.length - 1, 1);
+    return dataTable.map((item) => {
+      item.id = item.id.value;
+      return item;
+    });
   }
 
   checkValueIdForm(indexRow) {
@@ -165,8 +177,13 @@ export class TableDashboardComponent implements OnInit {
       }
     });
   }
+
   deleteRow(index) {
     this.rows.removeAt(index);
     this.updateView();
+  }
+
+  onRightClick() {
+    console.log('right');
   }
 }
